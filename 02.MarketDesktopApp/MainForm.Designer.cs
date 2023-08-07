@@ -43,6 +43,7 @@
             btnKK = new Button();
             txtPayment = new TextBox();
             groupBox4 = new GroupBox();
+            lbTotal = new Label();
             groupBox5 = new GroupBox();
             btnComplete = new Button();
             btnReset = new Button();
@@ -51,7 +52,6 @@
             dgPayment = new DataGridView();
             Type = new DataGridViewTextBoxColumn();
             Total = new DataGridViewTextBoxColumn();
-            lbTotal = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgList).BeginInit();
@@ -199,6 +199,17 @@
             groupBox4.TabStop = false;
             groupBox4.Text = " ";
             // 
+            // lbTotal
+            // 
+            lbTotal.Font = new Font("Times New Roman", 48F, FontStyle.Bold, GraphicsUnit.Point);
+            lbTotal.ForeColor = Color.Brown;
+            lbTotal.Location = new Point(112, 40);
+            lbTotal.Name = "lbTotal";
+            lbTotal.Size = new Size(477, 97);
+            lbTotal.TabIndex = 0;
+            lbTotal.Text = "36.000,00₺";
+            lbTotal.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // groupBox5
             // 
             groupBox5.Controls.Add(btnComplete);
@@ -218,7 +229,7 @@
             btnComplete.BackColor = Color.DarkSeaGreen;
             btnComplete.Font = new Font("Times New Roman", 32F, FontStyle.Regular, GraphicsUnit.Point);
             btnComplete.Image = (Image)resources.GetObject("btnComplete.Image");
-            btnComplete.Location = new Point(359, 140);
+            btnComplete.Location = new Point(359, 130);
             btnComplete.Margin = new Padding(3, 2, 3, 2);
             btnComplete.Name = "btnComplete";
             btnComplete.Size = new Size(287, 158);
@@ -230,7 +241,7 @@
             btnReset.BackColor = Color.Salmon;
             btnReset.Font = new Font("Times New Roman", 32F, FontStyle.Regular, GraphicsUnit.Point);
             btnReset.Image = (Image)resources.GetObject("btnReset.Image");
-            btnReset.Location = new Point(41, 140);
+            btnReset.Location = new Point(52, 130);
             btnReset.Margin = new Padding(3, 2, 3, 2);
             btnReset.Name = "btnReset";
             btnReset.Size = new Size(287, 158);
@@ -241,10 +252,11 @@
             // 
             lbRemaing.Font = new Font("Microsoft Sans Serif", 36F, FontStyle.Bold, GraphicsUnit.Point);
             lbRemaing.ForeColor = Color.Brown;
-            lbRemaing.Location = new Point(112, 26);
+            lbRemaing.Location = new Point(136, 26);
             lbRemaing.Name = "lbRemaing";
             lbRemaing.Size = new Size(453, 102);
             lbRemaing.TabIndex = 1;
+            lbRemaing.Text = "36.000,00₺";
             lbRemaing.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // groupBox6
@@ -284,16 +296,6 @@
             Total.MinimumWidth = 8;
             Total.Name = "Total";
             // 
-            // lbTotal
-            // 
-            lbTotal.Font = new Font("Times New Roman", 48F, FontStyle.Bold, GraphicsUnit.Point);
-            lbTotal.ForeColor = Color.Brown;
-            lbTotal.Location = new Point(112, 40);
-            lbTotal.Name = "lbTotal";
-            lbTotal.Size = new Size(477, 97);
-            lbTotal.TabIndex = 0;
-            lbTotal.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(18F, 36F);
@@ -307,6 +309,7 @@
             Controls.Add(groupBox1);
             Font = new Font("Times New Roman", 16F, FontStyle.Regular, GraphicsUnit.Point);
             Margin = new Padding(5, 4, 5, 4);
+            Name = "MainForm";
             Text = "MainForm";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
