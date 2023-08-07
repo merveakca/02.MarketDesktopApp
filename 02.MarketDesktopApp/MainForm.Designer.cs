@@ -43,7 +43,6 @@
             btnKK = new Button();
             txtPayment = new TextBox();
             groupBox4 = new GroupBox();
-            lbTotal = new Label();
             groupBox5 = new GroupBox();
             btnComplete = new Button();
             btnReset = new Button();
@@ -52,6 +51,7 @@
             dgPayment = new DataGridView();
             Type = new DataGridViewTextBoxColumn();
             Total = new DataGridViewTextBoxColumn();
+            lbTotal = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgList).BeginInit();
@@ -199,17 +199,6 @@
             groupBox4.TabStop = false;
             groupBox4.Text = " ";
             // 
-            // lbTotal
-            // 
-            lbTotal.Font = new Font("Times New Roman", 48F, FontStyle.Bold, GraphicsUnit.Point);
-            lbTotal.ForeColor = Color.Brown;
-            lbTotal.Location = new Point(112, 40);
-            lbTotal.Name = "lbTotal";
-            lbTotal.Size = new Size(477, 97);
-            lbTotal.TabIndex = 0;
-            lbTotal.Text = "10.850,38tl";
-            lbTotal.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // groupBox5
             // 
             groupBox5.Controls.Add(btnComplete);
@@ -256,7 +245,6 @@
             lbRemaing.Name = "lbRemaing";
             lbRemaing.Size = new Size(453, 102);
             lbRemaing.TabIndex = 1;
-            lbRemaing.Text = "10.850,38tl";
             lbRemaing.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // groupBox6
@@ -296,6 +284,16 @@
             Total.MinimumWidth = 8;
             Total.Name = "Total";
             // 
+            // lbTotal
+            // 
+            lbTotal.Font = new Font("Times New Roman", 48F, FontStyle.Bold, GraphicsUnit.Point);
+            lbTotal.ForeColor = Color.Brown;
+            lbTotal.Location = new Point(112, 40);
+            lbTotal.Name = "lbTotal";
+            lbTotal.Size = new Size(477, 97);
+            lbTotal.TabIndex = 0;
+            lbTotal.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(18F, 36F);
@@ -309,7 +307,6 @@
             Controls.Add(groupBox1);
             Font = new Font("Times New Roman", 16F, FontStyle.Regular, GraphicsUnit.Point);
             Margin = new Padding(5, 4, 5, 4);
-            Name = "MainForm";
             Text = "MainForm";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -334,7 +331,6 @@
         private DataGridView dgList;
         private GroupBox groupBox5;
         private TextBox txtPayment;
-        private Label lbTotal;
         private Label lbRemaing;
         private Button btnCash;
         private Button btnKK;
@@ -349,5 +345,6 @@
         private DataGridView dgPayment;
         private DataGridViewTextBoxColumn Type;
         private DataGridViewTextBoxColumn Total;
+        private Label lbTotal;
     }
 }
