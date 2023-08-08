@@ -309,7 +309,6 @@
             Controls.Add(groupBox1);
             Font = new Font("Times New Roman", 16F, FontStyle.Regular, GraphicsUnit.Point);
             Margin = new Padding(5, 4, 5, 4);
-            Name = "MainForm";
             Text = "MainForm";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
