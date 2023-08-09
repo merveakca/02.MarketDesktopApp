@@ -186,13 +186,12 @@
             txtPayment.Name = "txtPayment";
             txtPayment.Size = new Size(628, 89);
             txtPayment.TabIndex = 0;
-            txtPayment.Text = "100,25";
             txtPayment.TextAlign = HorizontalAlignment.Center;
             // 
             // groupBox4
             // 
             groupBox4.Controls.Add(lbTotal);
-            groupBox4.Location = new Point(1026, 12);
+            groupBox4.Location = new Point(1031, 12);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(683, 172);
             groupBox4.TabIndex = 2;
@@ -207,7 +206,6 @@
             lbTotal.Name = "lbTotal";
             lbTotal.Size = new Size(477, 97);
             lbTotal.TabIndex = 0;
-            lbTotal.Text = "36.000,00₺";
             lbTotal.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // groupBox5
@@ -247,6 +245,7 @@
             btnReset.Size = new Size(287, 158);
             btnReset.TabIndex = 4;
             btnReset.UseVisualStyleBackColor = false;
+            btnReset.Click += btnReset_Click;
             // 
             // lbRemaing
             // 
@@ -256,7 +255,6 @@
             lbRemaing.Name = "lbRemaing";
             lbRemaing.Size = new Size(453, 102);
             lbRemaing.TabIndex = 1;
-            lbRemaing.Text = "36.000,00₺";
             lbRemaing.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // groupBox6

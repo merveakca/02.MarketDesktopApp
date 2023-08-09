@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -23,38 +24,70 @@ namespace _02.MarketDesktopApp
         {
             if (e.KeyChar == 13)  //13 sayısı Enter tuşunun kodudur.(eğer enter tuşuna basılırsa demek istiyor)
             {
-                dgList.Rows.Add();
-                int count = dgList.Rows.Count - 1;
+                string connectionString = "Data Source=DESKTOP-D84DF12\\SQLEXPRESS02;Initial Catalog=MarketDb;Integrated Security=True;";
 
-                string code = txtBarcode.Text;
-                dgList.Rows[count].Cells[0].Value = count + 1;    //#
-                dgList.Rows[count].Cells[1].Value = code;         //Name
-                dgList.Rows[count].Cells[2].Value = 10;           //Quantity
-                dgList.Rows[count].Cells[3].Value = 5000.22;      //Price
-                dgList.Rows[count].Cells[4].Value = (10 * 5000.22).ToString("#,##0.00") + "₺";   //Total Price
+                SqlConnection connection = new(connectionString);
+                connection.Open();
 
-                txtBarcode.Text = "";
-
-                total = 0;
-
-                for (int i = 0; i < dgList.Rows.Count; i++)
+                int id = 0;
+                int.TryParse(txtBarcode.Text, out id);
+                if (id == 0)
                 {
-                    total += (Convert.ToDecimal(dgList.Rows[i].Cells[2].Value) * Convert.ToDecimal(dgList.Rows[i].Cells[3].Value));
+                    MessageBox.Show("Sadece numaretik değerler girebilirsiniz!", "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtBarcode.Text = "";
+                    return;
                 }
 
-                lbTotal.Text = total.ToString("#,##0.00") + "₺";
-
-                decimal totalPayment = 0;
-                for (int i = 0; i < dgPayment.Rows.Count; i++)
+                string query = "Select Top 1 * FROM Products where Id=" + id;
+                SqlCommand command = new(query, connection);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
                 {
-                    totalPayment += Convert.ToDecimal(dgPayment.Rows[i].Cells[1].Value);
+                    var name = reader["Name"].ToString();
+                    var price = (decimal)reader["Price"];
+                    AddShoppingCart(name, price);
                 }
-
-                remaing = total - totalPayment;
-
-                lbRemaing.Text = remaing.ToString("#,##0.00") + " ₺";
-                txtPayment.Text = remaing.ToString();
+                else
+                {
+                    MessageBox.Show("Ürün bulunamadı", "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtBarcode.Text = "";
+                }
             }
+        }
+
+        private void AddShoppingCart(string name, decimal price)
+        {
+            dgList.Rows.Add();
+            int count = dgList.Rows.Count - 1;
+
+            string code = txtBarcode.Text;
+            dgList.Rows[count].Cells[0].Value = count + 1;    //#
+            dgList.Rows[count].Cells[1].Value = name;         //Name
+            dgList.Rows[count].Cells[2].Value = 1;            //Quantity
+            dgList.Rows[count].Cells[3].Value = price;      //Price
+            dgList.Rows[count].Cells[4].Value = (price * 1).ToString("#,##0.00") + "₺";   //Total Price
+
+            txtBarcode.Text = "";
+
+            total = 0;
+
+            for (int i = 0; i < dgList.Rows.Count; i++)
+            {
+                total += (Convert.ToDecimal(dgList.Rows[i].Cells[2].Value) * Convert.ToDecimal(dgList.Rows[i].Cells[3].Value));
+            }
+
+            lbTotal.Text = total.ToString("#,##0.00") + "₺";
+
+            decimal totalPayment = 0;
+            for (int i = 0; i < dgPayment.Rows.Count; i++)
+            {
+                totalPayment += Convert.ToDecimal(dgPayment.Rows[i].Cells[1].Value);
+            }
+
+            remaing = total - totalPayment;
+
+            lbRemaing.Text = remaing.ToString("#,##0.00") + " ₺";
+            txtPayment.Text = remaing.ToString();
         }
 
         private void btnKK_Click(object sender, EventArgs e)
@@ -79,6 +112,16 @@ namespace _02.MarketDesktopApp
 
             if (remaing <= 0) gbPayment.Enabled = false;
             lbRemaing.Text = remaing.ToString("#,##0.00") + " ₺";
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            txtBarcode.Text = "0";
+            dgList.Rows.Clear();
+            lbTotal.Text = "0";
+            txtPayment.Text= "0";
+            dgPayment.Rows.Clear();
+            lbRemaing.Text = "0";
         }
     }
 }
