@@ -33,6 +33,11 @@
             txtBarcode = new TextBox();
             groupBox2 = new GroupBox();
             dgList = new DataGridView();
+            Count = new DataGridViewTextBoxColumn();
+            Name = new DataGridViewTextBoxColumn();
+            Quantitiy = new DataGridViewTextBoxColumn();
+            Price = new DataGridViewTextBoxColumn();
+            TotalPrice = new DataGridViewTextBoxColumn();
             gbPayment = new GroupBox();
             btnCash = new Button();
             btnKK = new Button();
@@ -47,11 +52,6 @@
             dgPayment = new DataGridView();
             Type = new DataGridViewTextBoxColumn();
             Total = new DataGridViewTextBoxColumn();
-            Count = new DataGridViewTextBoxColumn();
-            Name = new DataGridViewTextBoxColumn();
-            Quantitiy = new DataGridViewTextBoxColumn();
-            Price = new DataGridViewTextBoxColumn();
-            TotalPrice = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgList).BeginInit();
@@ -104,6 +104,41 @@
             dgList.RowTemplate.Height = 33;
             dgList.Size = new Size(895, 843);
             dgList.TabIndex = 0;
+            // 
+            // Count
+            // 
+            Count.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Count.HeaderText = "#";
+            Count.MinimumWidth = 8;
+            Count.Name = "Count";
+            // 
+            // Name
+            // 
+            Name.HeaderText = "Name";
+            Name.MinimumWidth = 8;
+            Name.Name = "Name";
+            Name.Width = 400;
+            // 
+            // Quantitiy
+            // 
+            Quantitiy.HeaderText = "Quantitiy";
+            Quantitiy.MinimumWidth = 8;
+            Quantitiy.Name = "Quantitiy";
+            Quantitiy.Width = 150;
+            // 
+            // Price
+            // 
+            Price.HeaderText = "Price";
+            Price.MinimumWidth = 8;
+            Price.Name = "Price";
+            Price.Width = 150;
+            // 
+            // TotalPrice
+            // 
+            TotalPrice.HeaderText = "TotalPrice";
+            TotalPrice.MinimumWidth = 8;
+            TotalPrice.Name = "TotalPrice";
+            TotalPrice.Width = 150;
             // 
             // gbPayment
             // 
@@ -200,6 +235,7 @@
             btnComplete.Size = new Size(287, 158);
             btnComplete.TabIndex = 3;
             btnComplete.UseVisualStyleBackColor = false;
+            btnComplete.Click += btnComplete_Click;
             // 
             // btnReset
             // 
@@ -262,41 +298,6 @@
             Total.MinimumWidth = 8;
             Total.Name = "Total";
             // 
-            // Count
-            // 
-            Count.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Count.HeaderText = "#";
-            Count.MinimumWidth = 8;
-            Count.Name = "Count";
-            // 
-            // Name
-            // 
-            Name.HeaderText = "Product Name";
-            Name.MinimumWidth = 8;
-            Name.Name = "Name";
-            Name.Width = 400;
-            // 
-            // Quantitiy
-            // 
-            Quantitiy.HeaderText = "Quantitiy";
-            Quantitiy.MinimumWidth = 8;
-            Quantitiy.Name = "Quantitiy";
-            Quantitiy.Width = 150;
-            // 
-            // Price
-            // 
-            Price.HeaderText = "Price";
-            Price.MinimumWidth = 8;
-            Price.Name = "Price";
-            Price.Width = 150;
-            // 
-            // TotalPrice
-            // 
-            TotalPrice.HeaderText = "TotalPrice";
-            TotalPrice.MinimumWidth = 8;
-            TotalPrice.Name = "TotalPrice";
-            TotalPrice.Width = 150;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(18F, 36F);
@@ -310,7 +311,6 @@
             Controls.Add(groupBox1);
             Font = new Font("Times New Roman", 16F, FontStyle.Regular, GraphicsUnit.Point);
             Margin = new Padding(5, 4, 5, 4);
-            Name = "MainForm";
             Text = "MainForm";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
