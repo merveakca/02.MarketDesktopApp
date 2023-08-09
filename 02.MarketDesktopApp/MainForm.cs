@@ -30,8 +30,7 @@ namespace _02.MarketDesktopApp
                 connection.Open();
 
                 int id = 0;
-                int.TryParse(txtBarcode.Text, out id);
-                if (id == 0)
+                if (!int.TryParse(txtBarcode.Text, out id))
                 {
                     MessageBox.Show("Sadece numaretik değerler girebilirsiniz!", "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     txtBarcode.Text = "";
@@ -116,12 +115,16 @@ namespace _02.MarketDesktopApp
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            txtBarcode.Text = "0";
+            Clear();
+        }
+        private void Clear()
+        {
+            txtBarcode.Text = "";
             dgList.Rows.Clear();
-            lbTotal.Text = "0";
-            txtPayment.Text= "0";
+            lbTotal.Text = "0,00₺";
+            txtPayment.Text = "";
             dgPayment.Rows.Clear();
-            lbRemaing.Text = "0";
+            lbRemaing.Text = "0,00₺";
         }
     }
 }
