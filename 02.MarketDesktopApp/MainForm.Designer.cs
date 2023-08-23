@@ -47,7 +47,7 @@
             groupBox5 = new GroupBox();
             btnComplete = new Button();
             btnReset = new Button();
-            lbRemaing = new Label();
+            lbRemaining = new Label();
             groupBox6 = new GroupBox();
             dgPayment = new DataGridView();
             Type = new DataGridViewTextBoxColumn();
@@ -121,9 +121,9 @@
             // 
             // Quantitiy
             // 
-            Quantitiy.HeaderText = "Quantitiy";
+            Quantitiy.HeaderText = "Quantity";
             Quantitiy.MinimumWidth = 8;
-            Quantitiy.Name = "Quantitiy";
+            Quantitiy.Name = "Quantity";
             Quantitiy.Width = 150;
             // 
             // Price
@@ -214,7 +214,7 @@
             // 
             groupBox5.Controls.Add(btnComplete);
             groupBox5.Controls.Add(btnReset);
-            groupBox5.Controls.Add(lbRemaing);
+            groupBox5.Controls.Add(lbRemaining);
             groupBox5.Location = new Point(1026, 858);
             groupBox5.Margin = new Padding(3, 2, 3, 2);
             groupBox5.Name = "groupBox5";
@@ -252,14 +252,14 @@
             // 
             // lbRemaing
             // 
-            lbRemaing.Font = new Font("Microsoft Sans Serif", 36F, FontStyle.Bold, GraphicsUnit.Point);
-            lbRemaing.ForeColor = Color.Brown;
-            lbRemaing.Location = new Point(136, 26);
-            lbRemaing.Name = "lbRemaing";
-            lbRemaing.Size = new Size(453, 102);
-            lbRemaing.TabIndex = 1;
-            lbRemaing.Text = "0,00₺";
-            lbRemaing.TextAlign = ContentAlignment.MiddleCenter;
+            lbRemaining.Font = new Font("Microsoft Sans Serif", 36F, FontStyle.Bold, GraphicsUnit.Point);
+            lbRemaining.ForeColor = Color.Brown;
+            lbRemaining.Location = new Point(136, 26);
+            lbRemaining.Name = "lbRemaining";
+            lbRemaining.Size = new Size(453, 102);
+            lbRemaining.TabIndex = 1;
+            lbRemaining.Text = "0,00₺";
+            lbRemaining.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // groupBox6
             // 
@@ -335,7 +335,7 @@
         private DataGridView dgList;
         private GroupBox groupBox5;
         private TextBox txtPayment;
-        private Label lbRemaing;
+        private Label lbRemaining;
         private Button btnCash;
         private Button btnKK;
         private Button btnComplete;

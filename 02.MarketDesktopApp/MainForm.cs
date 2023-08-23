@@ -14,7 +14,7 @@ namespace _02.MarketDesktopApp
     public partial class MainForm : Form
     {
         decimal total = 0;
-        decimal remaing = 0;
+        decimal remaining = 0;
         List<ReceiptDetail> receiptDetails = new();
         List<ReceiptPayment> receiptPayments = new();
 
@@ -50,7 +50,10 @@ namespace _02.MarketDesktopApp
                 {
                     MessageBox.Show("Ürün bulunamadı", "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     txtBarcode.Text = "";
+
                 }
+
+                connection.Close();
             }
         }
 
@@ -71,7 +74,7 @@ namespace _02.MarketDesktopApp
 
             for (int i = 0; i < dgList.Rows.Count; i++)
             {
-                total += (Convert.ToDecimal(dgList.Rows[i].Cells["Quantity"].Value) * Convert.ToDecimal(dgList.Rows[i].Cells["Price"].Value));
+                total += (Convert.ToDecimal(dgList.Rows[i].Cells[2].Value) * Convert.ToDecimal(dgList.Rows[i].Cells["Price"].Value));
             }
 
             lbTotal.Text = total.ToString("#,##0.00") + "₺";
@@ -82,10 +85,10 @@ namespace _02.MarketDesktopApp
                 totalPayment += Convert.ToDecimal(dgPayment.Rows[i].Cells[1].Value);
             }
 
-            remaing = total - totalPayment;
+            remaining = total - totalPayment;
 
-            lbRemaing.Text = remaing.ToString("#,##0.00") + " ₺";
-            txtPayment.Text = remaing.ToString();
+            lbRemaining.Text = remaining.ToString("#,##0.00") + " ₺";
+            txtPayment.Text = remaining.ToString();
 
             ReceiptDetail receiptDetail = new()
             {
@@ -105,9 +108,9 @@ namespace _02.MarketDesktopApp
             dgPayment.Rows.Add("Credit Card", payment);
             txtPayment.Text = "0";
 
-            remaing -= Convert.ToDecimal(payment);
-            if (remaing <= 0) gbPayment.Enabled = false;
-            lbRemaing.Text = remaing.ToString("#,##0.00") + " ₺";
+            remaining -= Convert.ToDecimal(payment);
+            if (remaining <= 0) gbPayment.Enabled = false;
+            lbRemaining.Text = remaining.ToString("#,##0.00") + " ₺";
 
             ReceiptPayment receiptPayment = new()
             {
@@ -125,10 +128,10 @@ namespace _02.MarketDesktopApp
             txtPayment.Text = "0";
 
 
-            remaing -= Convert.ToDecimal(payment);
+            remaining -= Convert.ToDecimal(payment);
 
-            if (remaing <= 0) gbPayment.Enabled = false;
-            lbRemaing.Text = remaing.ToString("#,##0.00") + " ₺";
+            if (remaining <= 0) gbPayment.Enabled = false;
+            lbRemaining.Text = remaining.ToString("#,##0.00") + " ₺";
 
             ReceiptPayment receiptPayment = new()
             {
@@ -147,11 +150,11 @@ namespace _02.MarketDesktopApp
         {
             dgList.Rows.Clear();
             dgPayment.Rows.Clear();
-            lbRemaing.Text = "0,00 ₺";
+            lbRemaining.Text = "0,00 ₺";
             lbTotal.Text = "0,00 ₺";
             txtPayment.Text = "0";
             total = 0;
-            remaing = 0;
+            remaining = 0;
             gbPayment.Enabled = true;
             txtBarcode.Focus();
             receiptDetails = new();
@@ -160,48 +163,91 @@ namespace _02.MarketDesktopApp
         }
 
         int receiptId = 0;
-        SqlConnection connection = new("Data Source=DESKTOP-3BJ5GK9\\SQLEXPRESS;Initial Catalog=MarketDb;Integrated Security=True;");
+        SqlConnection connection = new("Data Source=DESKTOP-D84DF12\\SQLEXPRESS02;Initial Catalog=MarketDb;Integrated Security=True;");
 
         private void btnComplete_Click(object sender, EventArgs e)
         {
-            if (remaing > 0)
+            if (remaining > 0)
             {
                 MessageBox.Show("Tüm ödeme yapılmadı!", "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
+            //transaction
+
             connection.Open();
-            Guid receiptNumber = Guid.NewGuid();
-            string query = $"Insert into Receipts(Id,Date,Total,Payment,Remaining,ReceiptNumber) Values(0,'{DateTime.Now}', {total}, {total - remaing}, {remaing}, '{receiptNumber}')";
 
-            //Burada hata var.
+            SqlTransaction transaction = connection.BeginTransaction();
 
-            SqlCommand command = new(query, connection);
-            command.ExecuteNonQuery();
-
-            SqlCommand getIdCommand = new($"Select TOP 1 Id From Receipts Where ReceiptNumber={receiptNumber}", connection);
-            SqlDataReader reader = getIdCommand.ExecuteReader();
-            receiptId = (int)reader["Id"];
-
-            foreach (var detail in receiptDetails)
+            try
             {
-                string detailQuery = $"insert into ReceiptDetails Values({receiptId},{detail.ProductId},{detail.Quantity},{detail.Price},{detail.Total})";
-                SqlCommand detailCommand = new(detailQuery, connection);
-                detailCommand.ExecuteNonQuery();
-            }
+                Guid receiptNumber = Guid.NewGuid();
+                string query = "Insert into Receipts(Date,Total,Payment,Remaining,ReceiptNumber) Values(@Date,@Total,@Payment,@Remaining,@ReceipNumber)";
 
-            foreach (var payment in receiptPayments)
+                SqlCommand command = new(query, connection, transaction);
+                command.Parameters.AddWithValue("@Date", DateTime.Now);
+                command.Parameters.AddWithValue("@Total", total);
+                command.Parameters.AddWithValue("@Payment", total - remaining);
+                command.Parameters.AddWithValue("@Remaining", remaining);
+                command.Parameters.AddWithValue("@ReceipNumber", receiptNumber);
+                command.ExecuteNonQuery();
+
+
+                SqlCommand getIdCommand = new($"Select TOP 1 Id From Receipts Where ReceiptNumber=@receiptNumber", connection, transaction);
+                getIdCommand.Parameters.AddWithValue("@receiptNumber", receiptNumber);
+                SqlDataReader reader = getIdCommand.ExecuteReader();
+                if (!reader.Read())
+                {
+                    reader.Close();
+                    connection.Close();
+                    return;
+                }
+
+                receiptId = (int)reader["Id"];
+                reader.Close();
+
+
+
+                foreach (var detail in receiptDetails)
+                {
+                    string detailQuery = $"insert into ReceiptDetails Values(@ReceiptId,@ProductId,@Quantity,@Price,@Total)";
+                    SqlCommand detailCommand = new(detailQuery, connection, transaction);
+                    detailCommand.Parameters.AddWithValue("@ReceiptId", receiptId);
+                    detailCommand.Parameters.AddWithValue("@ProductId", detail.ProductId);
+                    detailCommand.Parameters.AddWithValue("@Quantity", detail.Quantity);
+                    detailCommand.Parameters.AddWithValue("@Price", detail.Price);
+                    detailCommand.Parameters.AddWithValue("@Total", detail.Total);
+
+
+                    detailCommand.ExecuteNonQuery();
+                }
+
+                foreach (var payment in receiptPayments)
+                {
+                    string paymentQuery = $"insert into ReceiptPayments Values(@ReceiptId,@Type,@Amount)";
+                    SqlCommand paymentCommand = new(paymentQuery, connection, transaction);
+                    paymentCommand.Parameters.AddWithValue("@ReceiptId", receiptId);
+                    paymentCommand.Parameters.AddWithValue("@Type", payment.Type);
+                    paymentCommand.Parameters.AddWithValue("@Amount", payment.Amount);
+
+                    paymentCommand.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+
+                Clear();
+
+                MessageBox.Show("Alış-veriş başarıyla tamamlandı!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
             {
-                string paymentQuery = $"insert into ReceiptPayments Values({receiptId},{payment.Type},{payment.Amount})";
-                SqlCommand pametnCommand = new(paymentQuery, connection);
-                pametnCommand.ExecuteNonQuery();
+                transaction.Rollback();
+                MessageBox.Show($"Kayıt esnasında bir hatayla karşılaştık \n{ex.Message}", "Hata!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            connection.Close();
-
-            Clear();
-
-            MessageBox.Show("Alış-veriş başarıyla tamamlandı!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            finally
+            {
+                connection.Close();
+            }
         }
     }
     public class ReceiptDetail
@@ -212,13 +258,13 @@ namespace _02.MarketDesktopApp
         public decimal Price { get; set; }
         public decimal Total { get; set; }
     }
-
     public class ReceiptPayment
     {
         public int ReceiptId { get; set; }
         public string Type { get; set; }
         public decimal Amount { get; set; }
     }
+}
 
 
 
